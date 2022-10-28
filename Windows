@@ -1,0 +1,148 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        SqlConnection conn = new SqlConnection(@"Data Source=LAPTOP-E54C6VUV\SQLEXPRESS;Initial Catalog=YoneticiGirisi;Integrated Security=True");
+        // Sql bağlantısı kurulmalıdır.
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            tabControl2.SelectedTab = tabPage2;
+            textBox5.Text = textBox1.Text;
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox5.Text == "" || textBox4.Text == "")
+            {
+                MessageBox.Show("Lütfen boş alan bırakmayınız...");
+            }
+            else
+            {
+                conn.Open();
+                string user;
+                string password;
+                user = textBox5.Text;
+                password = textBox4.Text;
+
+                SqlCommand sorgu = new SqlCommand();
+                sorgu.Connection = conn;
+                sorgu.CommandText = "select * from Table_2 where Kullanici='" + user + "'";
+                SqlDataReader oku = sorgu.ExecuteReader();
+
+                if (oku.Read())
+                {
+                    oku.Close();
+                    SqlCommand guncelle = new SqlCommand();
+                    guncelle.Connection = conn;
+                    guncelle.CommandText = "update Table_2 set Sifre='" + password + "' where Kullanici='" + user + "'";
+                    guncelle.ExecuteNonQuery();
+                    // insert update delete işlemleri için kullanılır. Geriye int tipinde değer döndermektedir.
+                    MessageBox.Show("Şifreniz başarıyla güncellendi...");
+                }
+                else
+                {
+                    MessageBox.Show("Kullanıcı adınız hatalı...");
+                }
+
+
+                conn.Close();
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "" || textBox2.Text == "")
+            {
+                MessageBox.Show("Lutfen ilgili alanlari doldurunuz . ");
+            }
+            else
+            {
+                conn.Open();
+                //Databasedeki dosya açılır .
+                string user;
+                string password;
+                user = textBox1.Text;
+                password = textBox2.Text;
+                // Degiskenler verilir birazdan eşitlik olup olmayacağına bakılacak.
+
+                SqlCommand komut = new SqlCommand();
+                komut.Connection = conn;
+                // Nesne oluşturulur.
+                komut.CommandText = "select * from Table_2 where Kullanici = '" + user + "' and Sifre = '" + password + "'";
+                //Sql üzerinde istediğimiz kolona nasıl ulaşacağımızı belirtmemiz lazım .
+                SqlDataReader oku = komut.ExecuteReader();
+                // Geriye sql tipinde değer döndürmemiz için kullandık .
+                if (oku.Read())
+
+                {
+                    MessageBox.Show("Hosgeldiniz " + user);
+                }
+                else
+                {
+                    MessageBox.Show("Kullanici adiniz veya sifreniz hatali ! ");
+                }
+
+                conn.Close();
+                // Sql bağlantısı sona erdirilir.
+            }
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
